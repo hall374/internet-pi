@@ -27,6 +27,9 @@
       ansible.builtin.import_tasks: tasks/handlers.yml
 
   tasks:
+    - name: Prepare Machine.
+      ansible.builtin.import_tasks: tasks/machine-prep.yml
+
     - name: Setup Docker.
       ansible.builtin.import_tasks: tasks/docker.yml
 
@@ -49,3 +52,11 @@
     - name: Set up Starlink Monitoring.
       ansible.builtin.import_tasks: tasks/starlink.yml
       when: starlink_enable
+
+    - name: Setup Unbound Recursive DNS.
+      ansible.builtin.import_tasks: tasks/unbound.yml
+      when: unbound_enable
+
+    - name: Create SystemD Service Files.
+      ansible.builtin.import_tasks: tasks/systemd-definitions.yml
+      when: systemd_def_enable

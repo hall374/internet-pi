@@ -1,0 +1,15 @@
+---
+- hosts: internet_pi
+  become: true
+
+  pre_tasks:
+    - name: Load configuration (with defaults from example file).
+      ansible.builtin.include_vars: "{{ item }}"
+      loop:
+        - example.config.yml
+        - config.yml
+
+  tasks:
+    - name: Create SystemD Service Files.
+      ansible.builtin.import_tasks: tasks/systemd-definitions.yml
+      when: systemd_def_enable

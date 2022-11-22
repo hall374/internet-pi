@@ -1,0 +1,37 @@
+---
+- name: Create internet monitor group
+  group:
+    name: "internet_monitor"
+    state: present
+  become: true
+
+# First this and next steps from https://stackoverflow.com/a/60533790
+- name: Check if config dir exists
+  stat:
+    path: "{{ config_dir }}"
+  register: output_folder
+  become: true
+
+- name: Create output directory if not exists
+  file:
+    path: "{{ config_dir }}"
+    state: directory
+    owner: "{{ ansible_user_id }}"
+    group: internet_monitor
+    mode: 0775
+  when:
+    - output_folder.stat.exists == false
+  become: true
+
+
+- name: Check if systemd-resolved.service Service Exists
+  stat: path=/etc/init.d/systemd-resolved.service
+  register: service_status
+
+- name: Stop and disable systemd-resolved.service
+  ansible.builtin.service:
+    state: stopped
+    enabled: false
+  become: true
+  when: service_status.stat.exists
+  

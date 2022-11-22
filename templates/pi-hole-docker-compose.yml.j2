@@ -38,7 +38,7 @@ services:
 {% endif %}
     dns:
       - 127.0.0.1
-      - 8.8.8.8
+      - {{ pihole_secondary_dns }}
     volumes:
       - './etc-pihole/:/etc/pihole/'
       - './etc-dnsmasq.d/:/etc/dnsmasq.d/'

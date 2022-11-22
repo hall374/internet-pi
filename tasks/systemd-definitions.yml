@@ -1,0 +1,76 @@
+---
+# Figure out SystemD directory
+
+# TODO: Make these loops....sometime
+- name: Check if Debian
+  set_fact:
+    systemd_dir: "/lib/systemd/system"
+  when:
+  - ansible_facts.os_family == "Debian"
+
+- name: Check if Arch
+  set_fact:
+    systemd_dir: "/etc/systemd/system"
+  when:
+  - ansible_facts.os_family == "Archlinux"
+
+- name: Check if RedHat
+  set_fact:
+    systemd_dir: "/etc/systemd/system"
+  when:
+  - ansible_facts.os_family == "RedHat"
+
+
+- name: Set Variabls for Pi-Hole systemd service template
+  set_fact:
+    description: Pi-Hole DNS Ad Blocker
+    working_sub_dir: /pi-hole    
+
+- name: Copy Pi-hole systemd service file .
+  ansible.builtin.template:
+    src: templates/systemd-service.j2
+    dest: "{{ systemd_dir }}/pi-hole.service"
+    mode: '0774'
+  become: true
+  when: systemd_dir and pihole_enable
+
+- name: Set Variabls for internet monitoring systemd service template
+  set_fact:
+    description: Internet Monitoring and Grafana
+    working_sub_dir: /internet-monitoring
+
+- name: Copy internet-monitoring docker-compose template to Pi.
+  ansible.builtin.template:
+    src: templates/systemd-service.j2
+    dest: "{{ systemd_dir }}/internet-monitoring.service"
+    mode: '0774'
+  become: true
+  when: systemd_dir and monitoring_enable
+
+- name: Set Variabls for unbound dns systemd service template
+  set_fact:
+    description: Unbound Recursive DNS
+    working_sub_dir: /unbound-dns
+
+- name: Copy Unbound docker-compose template to Pi.
+  ansible.builtin.template:
+    src: templates/systemd-service.j2
+    dest: "{{ systemd_dir }}/unbound-dns.service"
+    mode: '0774'
+  become: true
+  when: systemd_dir and unbound_enable
+
+- name: Enable service pi-hole.service, and not touch the state
+  ansible.builtin.service:
+    name: pi-hole.service
+    enabled: yes
+
+- name: Enable service internet-monitoring.service, and not touch the state
+  ansible.builtin.service:
+    name: internet-monitoring.service
+    enabled: yes
+
+- name: Enable service unbound-dns.service, and not touch the state
+  ansible.builtin.service:
+    name: unbound-dns.service
+    enabled: yes

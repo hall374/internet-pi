@@ -1,0 +1,19 @@
+# {{ ansible_managed }}
+---
+version: "3.5"
+
+networks:
+  back-tier:
+    name: internet-monitoring-back-tier
+
+services:
+  unbound:
+    build: "."
+    image: "unbound-dns"
+    container_name: unbound
+    restart: unless-stopped
+    hostname: '{{ unbound_hostname }}'
+    ports:
+      - "{{ unbound_listen_port }}:53" 
+    networks:
+      - back-tier
