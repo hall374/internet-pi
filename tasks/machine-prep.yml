@@ -23,15 +23,15 @@
     - output_folder.stat.exists == false
   become: true
 
+# After trying 3 methods of checking for systemd-resolved, I'm giving up
+# and treating this like an exception block. Try to disable it. Most likely,
+# the only reason it will fail on a fresh install is that it's not there.
+- name: Try to stop systemd-resolved.service
+  ansible.builtin.shell: sudo systemctl stop systemd-resolved.service
+  become: true   # Ensure that the highest permissions are used on the remote host
+  ignore_errors: true
 
-- name: Check if systemd-resolved.service Service Exists
-  stat: path=/etc/init.d/systemd-resolved.service
-  register: service_status
-
-- name: Stop and disable systemd-resolved.service
-  ansible.builtin.service:
-    state: stopped
-    enabled: false
-  become: true
-  when: service_status.stat.exists
-  
+- name: Try to disable systemd-resolved
+  ansible.builtin.shell: sudo systemctl disable systemd-resolved.service
+  become: true   # Ensure that the highest permissions are used on the remote host
+  ignore_errors: true
