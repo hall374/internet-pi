@@ -4,8 +4,9 @@ Requires=docker.service
 After=docker.service
 
 [Service]
+After={{dependent_service}}
 Restart=always
-TimeoutStartSec=300
+TimeoutStartSec=600
 
 WorkingDirectory={{ config_dir }}{{ working_sub_dir }}
 

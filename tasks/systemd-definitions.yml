@@ -25,7 +25,8 @@
 - name: Set Variables for Pi-Hole systemd service template
   set_fact:
     description: Pi-Hole DNS Ad Blocker
-    working_sub_dir: /pi-hole    
+    working_sub_dir: /pi-hole
+    dependent_service: "bind9.service"
 
 - name: Copy Pi-hole systemd service file .
   ansible.builtin.template:
@@ -39,6 +40,7 @@
   set_fact:
     description: Internet Monitoring and Grafana
     working_sub_dir: /internet-monitoring
+    dependent_service: "docker.service"
 
 - name: Copy internet-monitoring docker-compose template to Pi.
   ansible.builtin.template:
@@ -65,6 +67,7 @@
   set_fact:
     description: Bind9 Recursive DNS
     working_sub_dir: /bind9-dns
+    dependent_service: "internet-monitoring.service"
 
 - name: Copy bind9 docker-compose template to Pi.
   ansible.builtin.template:

@@ -17,6 +17,7 @@ pihole_password: "{{ lookup('ansible.builtin.env', 'PIHOLE_PASS') }}"
 pihole_secondary_dns: 1.1.1.1
 
 # Internet monitoring configuration.
+speedtest_server_id: ""
 monitoring_enable: true
 monitoring_grafana_admin_password: "{{ lookup('ansible.builtin.env', 'GRAFANA_PASS') }}"
 monitoring_speedtest_interval: 15m

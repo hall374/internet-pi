@@ -97,6 +97,8 @@ services:
       - 9798
     ports:
       - 9798:9798
+    environment:
+      - SPEEDTEST_SERVER:{{speedtest_server_id}}
     image: miguelndecarvalho/speedtest-exporter
     restart: always
     networks:
