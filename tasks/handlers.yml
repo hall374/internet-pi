@@ -27,9 +27,9 @@
     restarted: true
   become: false
 
-- name: Restart unbound
+- name: Restart dnsmasq
   community.docker.docker_compose:
-    project_src: "{{ config_dir }}/unbound-dns/"
+    project_src: "{{ config_dir }}/dnsmasq-dns/"
     build: false
     restarted: true
   become: false

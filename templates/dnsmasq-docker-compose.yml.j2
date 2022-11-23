@@ -1,0 +1,19 @@
+# {{ ansible_managed }}
+---
+version: "3.5"
+
+networks:
+  back-tier:
+    name: internet-monitoring-back-tier
+
+services:
+  dnsmasq:
+    build: "."
+    image: "dnsmasq-dns"
+    container_name: dnsmasq
+    restart: unless-stopped
+    hostname: '{{ dnsmasq_hostname }}'
+    ports:
+      - "{{ dnsmasq_listen_port }}:53" 
+    networks:
+      - back-tier

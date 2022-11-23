@@ -51,13 +51,17 @@ airgradient_sensors:
 # Starlink configuration. (Also requires `monitoring_enable`)
 starlink_enable: false
 
-# dnsmasq configuration
-dnsmasq_cache_size: 300
+# Dnsmasq configuration
 dnsmasq_enable: true
+dnsmasq_forward_domain: "cloudflare.com"
 dnsmasq_forward_ip_primary: "1.1.1.1"
 dnsmasq_forward_ip_secondary: "1.0.0.1"
 dnsmasq_hostname: "dnsmasq"
+dnsmasq_ipv4_bind_address: "0.0.0.0"
+dnsmasq_ipv6_bind_address: "::0"
 dnsmasq_listen_port: 5353
+dnsmasq_upstream_dns: "1.1.1.1"
+dnsmasq_verbosity: 9
 
 
 # Create systemd service files on single board (Pi or Libre Computer)

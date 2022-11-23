@@ -12,9 +12,9 @@ infra-host-ttl: 60
 infra-lame-ttl: 120
 access-control: 127.0.0.0/8 allow
 access-control: 0.0.0.0/0 allow
-username: unbound
-directory: "/etc/unbound"
-logfile: "/var/log/unbound.log"
+username: dnsmasq
+directory: "/etc/dnsmasq"
+logfile: "/var/log/dnsmasq.log"
 use-syslog: no
 hide-version: yes
 so-rcvbuf: 4m
@@ -24,9 +24,9 @@ do-ip6: no
 do-udp: yes
 do-tcp: yes
 forward-zone:
-  name: "{{ unbound_forward_domain }}"
-  forward-addr: {{ unbound_forward_ip_primary }}
-  forward-addr: {{ unbound_forward_ip_secondary }}
+  name: "{{ dnsmasq_forward_domain }}"
+  forward-addr: {{ dnsmasq_forward_ip_primary }}
+  forward-addr: {{ dnsmasq_forward_ip_secondary }}
   forward-first: no
 remote-control:
 control-enable: yes

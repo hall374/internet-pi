@@ -1,0 +1,15 @@
+FROM debian:buster
+
+RUN apt update -y
+RUN apt install -y dnsmasq
+
+# dnsmasq resolv.conf file
+RUN touch /etc/dnsmasq_resolv.conf
+RUN echo "nameserver {{dnsmasq_forward_ip_primary}}" >> /etc/dnsmasq_resolv.conf
+RUN echo "nameserver {{dnsmasq_forward_ip_secondary}}" >> /etc/dnsmasq_resolv.conf
+
+RUN chmod 744 /etc/dnsmasq_resolv.conf
+
+COPY ./dnsmasq.conf /etc/dnsmasq.conf
+
+CMD /usr/sbin/dnsmasq -d

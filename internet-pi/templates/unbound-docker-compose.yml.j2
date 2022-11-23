@@ -7,13 +7,14 @@ networks:
     name: internet-monitoring-back-tier
 
 services:
-  unbound:
+  dnsmasq:
     build: "."
-    image: "unbound-dns"
-    container_name: unbound
+    image: "dnsmasq-dns"
+    container_name: dnsmasq
     restart: unless-stopped
-    hostname: '{{ unbound_hostname }}'
+    hostname: '{{ dnsmasq_hostname }}'
     ports:
-      - "{{ unbound_listen_port }}:53" 
+      - "{{ dnsmasq_listen_port }}:53" 
+      - "953:953"
     networks:
       - back-tier

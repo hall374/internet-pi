@@ -1,0 +1,40 @@
+---
+
+- name: Create dnsmasq folder on Pi.
+  ansible.builtin.file:
+    path: "{{ config_dir }}/dnsmasq-dns"
+    state: directory
+    mode: 0755
+    recurse: yes
+  become: false
+
+
+- name: Copy dnsmasq docker-compose template to Pi.
+  ansible.builtin.template:
+    src: templates/dnsmasq-docker-compose.yml.j2
+    dest: "{{ config_dir }}/dnsmasq-dns/docker-compose.yml"
+    mode: '0640'
+  become: false
+
+- name: Copy dnsmasq.conf template to Pi.
+  ansible.builtin.template:
+    src: templates/dnsmasq-config.j2
+    dest: "{{ config_dir }}/dnsmasq-dns/dnsmasq.conf"
+    mode: '0640'
+  become: false
+
+- name: Copy dnsmasq Dockerfile template to Pi.
+  ansible.builtin.template:
+    src: templates/dnsmasq-dockerfile.j2
+    dest: "{{ config_dir }}/dnsmasq-dns/Dockerfile"
+    mode: '0644'
+  become: false
+  notify: Restart dnsmasq
+
+# TODO: The first time this playbook is run, the `pi` user may not be added
+# to the `docker` group, so this task may fail.
+- name: Ensure dnsmasq is running.
+  community.docker.docker_compose:
+    project_src: "{{ config_dir }}/dnsmasq-dns/"
+    build: false
+  become: false

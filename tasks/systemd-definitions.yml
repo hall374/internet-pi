@@ -47,18 +47,18 @@
   become: true
   when: systemd_dir and monitoring_enable
 
-- name: Set Variabls for unbound dns systemd service template
+- name: Set Variabls for dnsmasq dns systemd service template
   set_fact:
-    description: Unbound Recursive DNS
-    working_sub_dir: /unbound-dns
+    description: Dnsmasq Recursive DNS
+    working_sub_dir: /dnsmasq-dns
 
-- name: Copy Unbound docker-compose template to Pi.
+- name: Copy Dnsmasq docker-compose template to Pi.
   ansible.builtin.template:
     src: templates/systemd-service.j2
-    dest: "{{ systemd_dir }}/unbound-dns.service"
+    dest: "{{ systemd_dir }}/dnsmasq-dns.service"
     mode: '0774'
   become: true
-  when: systemd_dir and unbound_enable
+  when: systemd_dir and dnsmasq_enable
 
 - name: Enable service pi-hole.service, and not touch the state
   ansible.builtin.service:
@@ -70,7 +70,7 @@
     name: internet-monitoring.service
     enabled: yes
 
-- name: Enable service unbound-dns.service, and not touch the state
+- name: Enable service dnsmasq-dns.service, and not touch the state
   ansible.builtin.service:
-    name: unbound-dns.service
+    name: dnsmasq-dns.service
     enabled: yes
