@@ -7,14 +7,12 @@ networks:
     name: internet-monitoring-back-tier
 
 services:
-  dnsmasq:
-    build: "."
-    image: "dnsmasq-dns"
-    container_name: dnsmasq
+  bind9:
+    image: ubuntu/bind9
+    container_name: bind9
     restart: unless-stopped
-    hostname: '{{ dnsmasq_hostname }}'
+    hostname: '{{ bind9_hostname }}'
     ports:
-      - "{{ dnsmasq_listen_port }}:53" 
-      - "953:953"
+      - "{{ bind9_listen_port }}:53" 
     networks:
       - back-tier

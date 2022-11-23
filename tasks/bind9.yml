@@ -1,0 +1,24 @@
+---
+
+- name: Create bind9 folder on Pi.
+  ansible.builtin.file:
+    path: "{{ config_dir }}/bind9-dns"
+    state: directory
+    mode: 0755
+    recurse: yes
+  become: false
+
+- name: Copy bind9 docker-compose template to Pi.
+  ansible.builtin.template:
+    src: templates/bind9-docker-compose.yml.j2
+    dest: "{{ config_dir }}/bind9-dns/docker-compose.yml"
+    mode: '0640'
+  become: false
+
+# TODO: The first time this playbook is run, the `pi` user may not be added
+# to the `docker` group, so this task may fail.
+- name: Ensure bind9 is running.
+  community.docker.docker_compose:
+    project_src: "{{ config_dir }}/bind9-dns/"
+    build: false
+  become: false

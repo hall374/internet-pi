@@ -8,7 +8,6 @@
     recurse: yes
   become: false
 
-
 - name: Copy dnsmasq docker-compose template to Pi.
   ansible.builtin.template:
     src: templates/dnsmasq-docker-compose.yml.j2

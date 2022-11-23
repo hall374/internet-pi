@@ -53,12 +53,16 @@ starlink_enable: false
 
 # dnsmasq configuration
 dnsmasq_cache_size: 300
-dnsmasq_enable: true
+dnsmasq_enable: false
 dnsmasq_forward_ip_primary: "1.1.1.1"
 dnsmasq_forward_ip_secondary: "1.0.0.1"
 dnsmasq_hostname: "dnsmasq"
 dnsmasq_listen_port: 5353
 
+# bind9 configuration
+bind9_enable: true
+bind9_hostname: "bind9"
+bind9_listen_port: 5353
 
 # Create systemd service files on single board (Pi or Libre Computer)
 systemd_def_enable: true

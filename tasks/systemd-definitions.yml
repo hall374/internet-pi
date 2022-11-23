@@ -20,8 +20,9 @@
   when:
   - ansible_facts.os_family == "RedHat"
 
-
-- name: Set Variabls for Pi-Hole systemd service template
+# There's a better way to do this; just don't know it and
+# am unwilling to spend effort when this works fine
+- name: Set Variables for Pi-Hole systemd service template
   set_fact:
     description: Pi-Hole DNS Ad Blocker
     working_sub_dir: /pi-hole    
@@ -34,7 +35,7 @@
   become: true
   when: systemd_dir and pihole_enable
 
-- name: Set Variabls for internet monitoring systemd service template
+- name: Set Variables for internet monitoring systemd service template
   set_fact:
     description: Internet Monitoring and Grafana
     working_sub_dir: /internet-monitoring
@@ -47,9 +48,9 @@
   become: true
   when: systemd_dir and monitoring_enable
 
-- name: Set Variabls for dnsmasq dns systemd service template
+- name: Set Variables for dnsmasq dns systemd service template
   set_fact:
-    description: Dnsmasq Recursive DNS
+    description: Dnsmasq Forwarding DNS
     working_sub_dir: /dnsmasq-dns
 
 - name: Copy Dnsmasq docker-compose template to Pi.
@@ -60,17 +61,39 @@
   become: true
   when: systemd_dir and dnsmasq_enable
 
+- name: Set Variables for bind9 dns systemd service template
+  set_fact:
+    description: Bind9 Recursive DNS
+    working_sub_dir: /bind9-dns
+
+- name: Copy bind9 docker-compose template to Pi.
+  ansible.builtin.template:
+    src: templates/systemd-service.j2
+    dest: "{{ systemd_dir }}/bind9.service"
+    mode: '0774'
+  become: true
+  when: systemd_dir and bind9_enable
+
 - name: Enable service pi-hole.service, and not touch the state
   ansible.builtin.service:
     name: pi-hole.service
     enabled: yes
+  when: systemd_dir and pihole_enable
 
 - name: Enable service internet-monitoring.service, and not touch the state
   ansible.builtin.service:
     name: internet-monitoring.service
     enabled: yes
+  when: systemd_dir and monitoring_enable
 
 - name: Enable service dnsmasq-dns.service, and not touch the state
   ansible.builtin.service:
     name: dnsmasq-dns.service
     enabled: yes
+  when: systemd_dir and dnsmasq_enable
+
+- name: Enable service bind9.service, and not touch the state
+  ansible.builtin.service:
+    name: bind9.service
+    enabled: yes
+  when: systemd_dir and bind9_enable

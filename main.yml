@@ -53,9 +53,15 @@
       ansible.builtin.import_tasks: tasks/starlink.yml
       when: starlink_enable
 
-    - name: Setup Dnsmasq Recursive DNS.
-      ansible.builtin.import_tasks: tasks/dnsmasq.yml
-      when: dnsmasq_enable
+    # I totally hooked this up by mistake....but hey, if you want
+    # another dnsmasq server, here you go...
+    # - name: Setup Dnsmasq Forwarding DNS.
+    #   ansible.builtin.import_tasks: tasks/dnsmasq.yml
+    #   when: dnsmasq_enable
+
+    - name: Setup bind9 Recursive DNS.
+      ansible.builtin.import_tasks: tasks/bind9.yml
+      when: bind9_enable
 
     - name: Create SystemD Service Files.
       ansible.builtin.import_tasks: tasks/systemd-definitions.yml
