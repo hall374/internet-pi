@@ -98,8 +98,8 @@ services:
     ports:
       - 9798:9798
     environment:
-      - SPEEDTEST_SERVER:{{speedtest_server_id}}
-    image: miguelndecarvalho/speedtest-exporter
+      - SPEEDTEST_SERVER={{speedtest_server_id}}
+    image: ghcr.io/miguelndecarvalho/speedtest-exporter
     restart: always
     networks:
       - back-tier
