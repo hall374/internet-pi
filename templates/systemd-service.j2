@@ -4,7 +4,9 @@ Requires=docker.service
 After=docker.service
 
 [Service]
+{% if 'dependent_service' %}
 After={{dependent_service}}
+{% endif %}
 Restart=always
 TimeoutStartSec=600
 

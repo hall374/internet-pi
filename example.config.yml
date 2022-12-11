@@ -67,3 +67,6 @@ bind9_listen_port: 5353
 
 # Create systemd service files on single board (Pi or Libre Computer)
 systemd_def_enable: true
+
+# Local OpenSpeedTest config
+openspeedtest_enable: true

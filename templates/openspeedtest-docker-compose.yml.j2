@@ -1,0 +1,12 @@
+# {{ ansible_managed }}
+---
+version: "3"
+
+services:
+  openspeedtest:
+    container_name: openspeedtest
+    image: openspeedtest
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+    restart: unless-stopped

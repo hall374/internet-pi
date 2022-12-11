@@ -77,6 +77,21 @@
   become: true
   when: systemd_dir and bind9_enable
 
+- name: Set Variables for OpenSpeedTest systemd service template
+  set_fact:
+    description: OpenSpeedTest DNS Ad Blocker
+    working_sub_dir: /openspeedtest
+
+- name: Copy Open Speedtest systemd service file .
+  ansible.builtin.template:
+    src: templates/systemd-service.j2
+    dest: "{{ systemd_dir }}/openspeedtest.service"
+    mode: '0774'
+  become: true
+  when: systemd_dir and openspeedtest_enable
+
+# Enable new systemd service
+
 - name: Enable service pi-hole.service, and not touch the state
   ansible.builtin.service:
     name: pi-hole.service
@@ -100,3 +115,9 @@
     name: bind9.service
     enabled: yes
   when: systemd_dir and bind9_enable
+
+- name: Enable service openspeedtest.service, and not touch the state
+  ansible.builtin.service:
+    name: openspeedtest.service
+    enabled: yes
+  when: systemd_dir and openspeedtest_enable

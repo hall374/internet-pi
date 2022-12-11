@@ -63,6 +63,10 @@
       ansible.builtin.import_tasks: tasks/bind9.yml
       when: bind9_enable
 
+    - name: Setup openspeedtest local server
+      ansible.builtin.import_tasks: tasks/openspeedtest.yml
+      when: openspeedtest_enable
+
     - name: Create SystemD Service Files.
       ansible.builtin.import_tasks: tasks/systemd-definitions.yml
       when: systemd_def_enable
