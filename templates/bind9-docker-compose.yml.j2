@@ -2,10 +2,6 @@
 ---
 version: "3.5"
 
-networks:
-  back-tier:
-    name: internet-monitoring-back-tier
-
 services:
   bind9:
     image: ubuntu/bind9
@@ -13,6 +9,4 @@ services:
     restart: unless-stopped
     hostname: '{{ bind9_hostname }}'
     ports:
-      - "{{ bind9_listen_port }}:53" 
-    networks:
-      - back-tier
+      - "{{ bind9_listen_port }}:53"
